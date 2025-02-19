@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import Layout from "./components/base/layout/layout";
 import { QuizContext } from "./context/context";
 import AppRoutes from "./routes/routes";
 
@@ -8,7 +9,9 @@ function App() {
   return (
     <>
       <QuizContext.Provider value={{ quizList, setQuizList }}>
-        <AppRoutes></AppRoutes>
+        <Layout>
+          <AppRoutes></AppRoutes>
+        </Layout>
       </QuizContext.Provider>
     </>
   );

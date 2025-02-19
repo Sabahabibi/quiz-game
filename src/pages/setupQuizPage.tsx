@@ -1,8 +1,8 @@
-import { Button } from "@chakra-ui/react";
+import { Button, Input, Select, Text } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
-
-import { useNavigate } from "react-router";
+import { Link } from "react-router";
 import { getCategoryData, getQuiz } from "../api/get";
+import BoxCard from "../components/base/boxCard/boxCard";
 import { QuizContext } from "../context/context";
 
 interface Category {
@@ -11,7 +11,6 @@ interface Category {
 }
 
 export default function SetUpQuizPage() {
-  const navigate = useNavigate();
   const [categoryList, setCategoryList] = useState<Category[]>([]);
   const { setQuizList } = useContext(QuizContext);
 
@@ -45,37 +44,54 @@ export default function SetUpQuizPage() {
     getQuiz(count, category, difficulty)
       .then((res) => {
         setQuizList(res);
-        navigate("/quizPage");
       })
       .catch((error) => console.error("Error starting quiz:", error));
   };
 
   return (
-    <div>
-      <h1>QUIZ</h1>
-      <p>Setup Quiz</p>
-      <p>Let's start quiz</p>
-      <form onSubmit={quizStartHandler}>
-        <input type="number" name="count" placeholder="count" required />
+    <BoxCard>
+      <h1 className="text-5xl font-extrabold text-blue-600 text-center mb-6 animate__animated animate__fadeIn">
+        QUIZ
+      </h1>
+      <Text fontSize="xl" textAlign="center" mb={6}>
+        Setup Your Quiz
+      </Text>
+      <form onSubmit={quizStartHandler} className="space-y-4">
+        <Input
+          type="number"
+          name="count"
+          placeholder="Number of Questions"
+          required
+          className="border p-2 rounded-lg"
+        />
 
-        <select name="category" required>
-          <option value="">Select a category</option>
+        <Select name="category" required className="border p-2 rounded-lg">
+          <option value="">Select a Category</option>
           {categoryList.map((item) => (
             <option key={item.id} value={item.id}>
               {item.name}
             </option>
           ))}
-        </select>
+        </Select>
 
-        <select name="difficulty" required>
-          <option value="">Select difficulty</option>
+        <Select name="difficulty" required className="border p-2 rounded-lg">
+          <option value="">Select Difficulty</option>
           <option value="easy">Easy</option>
           <option value="medium">Medium</option>
           <option value="hard">Hard</option>
-        </select>
-
-        <Button type="submit">Start</Button>
+        </Select>
+        <Link to="/quizPage">
+          <Button
+            type="submit"
+            colorScheme="blue"
+            size="lg"
+            width="full"
+            className="mt-6 transition transform hover:scale-110 hover:bg-blue-600 duration-300 ease-in-out"
+          >
+            Start Quiz
+          </Button>
+        </Link>
       </form>
-    </div>
+    </BoxCard>
   );
 }
